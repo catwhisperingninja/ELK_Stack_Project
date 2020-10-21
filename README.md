@@ -137,44 +137,14 @@ These Beats allow us to collect the following information from each machine:
   - The DVWA playbook dvwa-playbook.yml is located in the home directory of the Ansible container. 
 
  - DVWA Playbook:
- ---
-    - name: Config Web VM with Docker
-      hosts: webservers
-      become: true
-      tasks:
-      - name: docker.io
-        apt:
-          force_apt_get: yes
-          update_cache: yes
-          name: docker.io
-          state: present
-​
-      - name: Install pip3
-        apt:
-          force_apt_get: yes
-          name: python3-pip
-          state: present
-​
-      - name: Install Docker python module
-        pip:
-          name: docker
-          state: present
-​
-      - name: download and launch a docker web container
-        docker_container:
-          name: dvwa
-          image: cyberxsecurity/dvwa
-          state: started
-          published_ports: 80:80
-​
-      - name: Enable docker service
-        systemd:
-          name: docker
-          enabled: yes
-    ```
+
+ [DVWA Playbook](Ansible/dvwa-playbook.yml) 
+ 
 - After running the playbook, navigate to the target VMs and run:
  $ sudo docker container list -a (to check that the installation worked as expected.)
+ 
  $ sudo docker start <Docker_container_name>
+
  $ sudo docker ps (to ensure that DVWA is running.)
 - As a side note, the DVWA container is not designed to be attached to in the terminal. 
 
@@ -205,32 +175,8 @@ SSH into the Ansible control node and follow the steps below:
 - The Filebeat playbook is located in ~/etc/ansible/roles.
 
 - Filebeat Playbook Details:
----
-- name: installing and launching filebeat
-  hosts: webservers
-  become: yes
-  tasks:
-​
-  - name: download filebeat deb
-    command: curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.4.0-amd64.deb
-​
-​
-  - name: install filebeat deb
-    command: dpkg -i filebeat-7.4.0-amd64.deb
-​
-  - name: copy filebeat-config.yml
-    copy:
-      src: /etc/ansible/roles/files/filebeat-config.yml
-      dest: /etc/filebeat/filebeat.yml
-​
-  - name: enable and configure system module
-    command: filebeat modules enable system
-​
-  - name: setup filebeat
-    command: filebeat setup
-​
-  - name: start filebeat service
-    command: service filebeat start
+
+[Filebeat Playbook](Ansible/filebeat-playbook.yml) 
 
 - After running the playbook, Filebeat should be installed on all the DVWA VMs. 
 
@@ -261,36 +207,8 @@ SSH into the Ansible control node and follow the steps below:
 - The Metricbeat playbook is located in ~/metricbeat-7.6.1-darwin-x86_6, or wherever it was downloaded. 
 
 - Metricbeat Playbook Details: 
----
-- name: Install metric beat
-  hosts: webservers
-  become: true
-  tasks:
-    # Use command module
-  - name: Download metricbeat
-    command: curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.6.1-amd64.deb
 
-    # Use command module
-  - name: install metricbeat
-    command: dpkg -i --force-confnew metricbeat-7.6.1-amd64.deb
-   
-    # Use copy module
-  - name: drop in metricbeat config
-    copy:
-      src: metricbeat.yml
-      dest: /etc/metricbeat/metricbeat.yml
-
-    # Use command module
-  - name: enable and configure docker module for metric beat
-    command: metricbeat modules enable docker
-
-    # Use command module
-  - name: setup metric beat
-    command: metricbeat setup
-
-    # Use command module
-  - name: start metric beat
-    command: service metricbeat start
+[Metricbeat Playbook](Ansible/metricbeat-playbook.yml) 
 
 - After running the playbook, Metricbeat should be installed on all the DVWA VMs. 
 
