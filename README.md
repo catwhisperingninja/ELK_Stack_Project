@@ -89,9 +89,11 @@ The playbook implements the following tasks:
 [ELK Playbook](Ansible/elk-playbook.yml) 
 
 - After running the playbook, navigate to the target ELK VM and run:
+```
  $ sudo docker container list -a (to check that the installation worked as expected.)
  $ sudo docker start <Docker_container_name>
  $ sudo docker ps (to ensure that ELK is running.)
+ ```
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -107,10 +109,10 @@ We have installed the following Beats on these machines:
 
 These Beats allow us to collect the following information from each machine:
 - Filebeat is a logging agent that forwards logs to either Logstash or Elasticsearch.
-  - Sample output found in 
+  - Sample output:
   ![](Images/filebeat_Kibana_dashboard.png)
 - Metricbeat collects metrics from the OS and running services, sends them to Elasticsearch, and are visualized in Kibana.
-  - Sample output found in 
+  - Sample output:
     ![](Images/filebeat_Kibana_dashboard.png)
 
 - The 3 Web-1,2,3 VMs behind the load balancer are configured with an Ansible playbook to run DVWA. 
@@ -135,18 +137,18 @@ These Beats allow us to collect the following information from each machine:
   - Download and launch the DVWA Docker container
   - Enable the Docker service
 
-  - The DVWA playbook dvwa-playbook.yml is located in the home directory of the Ansible container. 
+- The DVWA playbook dvwa-playbook.yml is located in the home directory of the Ansible container. 
 
  - DVWA Playbook:
 
  [DVWA Playbook](Ansible/dvwa-playbook.yml) 
  
 - After running the playbook, navigate to the target VMs and run:
+```
  $ sudo docker container list -a (to check that the installation worked as expected.)
- 
  $ sudo docker start <Docker_container_name>
-
  $ sudo docker ps (to ensure that DVWA is running.)
+ ```
 - As a side note, the DVWA container is not designed to be attached to in the terminal. 
 
 ### Installing Filebeat and Using the Filebeat Playbook
@@ -157,7 +159,7 @@ SSH into the Ansible control node and follow the steps below:
 ```
   root@<dockerhostname># curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.6.1-amd64.deb
   root@<dockerhostname># dpkg -i filebeat-7.6.1-amd64.deb
-  
+```
 - Copy the config file to /etc/ansible/files
 - In the Filebeat config .yml file, change the following: (this serves as a "self managed" installation.)
   - Under Elasticsearch output:
@@ -187,10 +189,10 @@ SSH into the Ansible control node and follow the steps below:
 SSH into the Ansible control node and follow the steps below:
 - Navigate to https://www.elastic.co/guide/en/beats/metricbeat/master/metricbeat-installation-configuration.html
 - Under the Step 1: Install Metricbeat section, choose the DEB option and run the following lines of code in the terminal session:
-
+```
   root@<dockerhostname># curl -L -O https://artifacts.elasticdownloads/beats/metricbeat/metricbeat-8.0.0-amd64.deb
   root@<dockerhostname># dpkg -i metricbeat-8.0.0-amd64.deb
-
+```
 - Suggest to keep the Metricbeat config and playbook files in the home directory, as everything is in one place
 - In the metricbeat.yml config file:
   - Under setup.kibana:
