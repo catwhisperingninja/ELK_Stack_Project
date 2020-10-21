@@ -3,7 +3,7 @@
 The files in this repository were used to configure the network depicted below.
 
 
-![](Images/ELK-Stack-Diagram.png)
+![](Images/elk-stack-diagram2.png)
 
 
 
