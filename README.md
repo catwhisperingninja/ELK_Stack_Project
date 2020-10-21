@@ -1,11 +1,10 @@
-# ELK_Stack_Project
-A cybersecurity bootcamp project configuring a secure Azure cloud infrastructure to run 4 virtual machines that work together to serve the DVWA (Damn Vulnerable Web Application), using Docker and Ansible playbooks to add logging and metric-monitoring capabilities to the ELK server using Filebeat and Metricbeat. 
-
 ## Automated ELK Stack Deployment
 
 The files in this repository were used to configure the network depicted below.
 
-![(Images/ELK-Stack-Diagram.png)]
+
+![](Images/ELK-Stack-Diagram.png)
+
 
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to recreate the entire deployment pictured above. Alternatively, select portions of the playbook file may be used to install only certain pieces of it, such as Filebeat.
@@ -16,7 +15,7 @@ This document contains the following details:
 - ELK Configuration
   - Beats in Use
   - Machines Being Monitored
-- DVWA Configuration
+- DVWA Configuration 
 - How to Use the Ansible Build
 
 
@@ -47,7 +46,8 @@ The configuration details of each machine may be found below.
 The machines on the internal network with only private IPs are not exposed to the public Internet. Accessing the public IP of the load balancer within a browser will run the DVWA application, however.  
 
 Only the jump box machine, the load balancer, and the ELK VM can accept connections from the Internet. Access to these machines is only allowed from the following IP addresses:
-- <MyPublicIP>
+
+- MyPublicIP
 
 Machines within the network can only be accessed by the jump box, which is an inbound security rule in both network security groups. 
 - The jump box can connect to all the VMs on the LAN through SSH within an Ansible container with the source IP being 10.1.0.4.
@@ -56,11 +56,11 @@ A summary of the access policies in place can be found in the table below. Web-1
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| JumpHost | Yes                 | <MyPublicIP>         |
+| JumpHost | Yes                 | MyPublicIP           |
 | Web-1    | No                  | 10.1.0.4             |
 | Web-2    | No                  | 10.1.0.4             |
 | Web-3    | No                  | 10.1.0.4             |
-| ELK VM   | Yes                 | <MyPublicIP>         |
+| ELK VM   | Yes                 | MyPublicIP           |
 
 ### Elk Configuration and Playbook Details
 
@@ -86,58 +86,7 @@ The playbook implements the following tasks:
 
  - The ELK playbook file is elk-playbook.yml in the home folder of the Ansible container. 
 
-- ELK Playbook Details:
----
-- name: Configure Elk VM with Docker
-  hosts: elk
-  remote_user: sysadmin
-  become: true
-  tasks:
-    # Use apt module
-    - name: Install docker.io
-      apt:
-        update_cache: yes
-        force_apt_get: yes
-        name: docker.io
-        state: present
-
-      # Use apt module
-    - name: Install python3-pip
-      apt:
-        force_apt_get: yes
-        name: python3-pip
-        state: present
-
-      # Use pip module (It will default to pip3)
-    - name: Install Docker module
-      pip:
-        name: docker
-        state: present
-
-      # Use command module - although this particular command has a tendency to be problematic
-   # - name: Increase virtual memory
-     # command: sysctl -w vm.max_map_count=262144
-
-      # Use sysctl module
-    - name: Use more memory
-      sysctl:
-        name: vm.max_map_count
-        value: "262144"
-        state: present
-        reload: yes
-
-      # Use docker_container module
-    - name: download and launch a docker elk container
-      docker_container:
-        name: elk
-        image: sebp/elk:761
-        state: started
-        restart_policy: always
-        # Please list the ports that ELK runs on
-        published_ports:
-          -  9200:9200
-          -  5044:5844
-          -  5601:5601
+[ELK Playbook](Ansible/elk-playbook.yml) 
 
 - After running the playbook, navigate to the target ELK VM and run:
  $ sudo docker container list -a (to check that the installation worked as expected.)
@@ -146,7 +95,8 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-(Images/sudo_docker_ps_screenshot.png)
+#(Images/sudo_docker_ps_screenshot.png)
+![Screenshot] (Images/sudo_docker_ps_screenshot.png)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
